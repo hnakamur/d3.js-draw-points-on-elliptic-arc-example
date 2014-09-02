@@ -73,20 +73,12 @@ circleLayer.selectAll('ellipse.calculated').data([ellipticArc])
     }
   });
 
-function toRadians(degree) {
-  return degree * Math.PI / 180;
-}
-
 var n = 16;
-var thetaStart = toRadians(ellipticArc.angleStart);
-var thetaExtent = toRadians(ellipticArc.angleExtent);
 var points = [];
-points.push(ellipticArc.getPoint(thetaStart))
-for (var i = 1; i < n; i++) {
-  var theta = thetaStart + i * thetaExtent / n;
-  points.push(ellipticArc.getPoint(theta));
+for (var i = 0; i <= n; i++) {
+  var t = i / n;
+  points.push(ellipticArc.getPointAt(t));
 }
-points.push(ellipticArc.getPoint(thetaStart + thetaExtent));
 circleLayer.selectAll('circle.calculated').data(points)
   .enter().append('circle')
   .attr({
