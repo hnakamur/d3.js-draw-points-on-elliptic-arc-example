@@ -1,15 +1,15 @@
-d3.js-draw-arc-with-rational-bezier-example
-===========================================
+d3.js-draw-points-on-elliptic-arc-example
+=========================================
 
-an example of drawing an arc with a rational bezier curve using d3.js
+an example of calculating center and angles of elliptic arc and draw points using d3.js
 
 ## Demo
-http://hnakamur.github.io/d3.js-draw-arc-with-rational-bezier-example
+http://hnakamur.github.io/d3.js-draw-points-on-elliptic-arc-example
 
 ## References
 
-- [T. W. Sederberg, BYU, Computer Aided Geometric Design Course Notes October 23, 2012]( http://tom.cs.byu.edu/~557/text/cagd.pdf )
-- Detlef Reimers, Drawing Circles with Rational Quadratic Bezier Curves, September 1, 2011 ( ftp://ftp.tex.ac.uk/tex-archive/macros/latex/contrib/lapdf/rcircle.pdf )
+- [F.6 Elliptical arc implementation notes - SVG 1.1 (Second Edition)]( http://www.w3.org/TR/SVG/implnote.html#ArcImplementationNotes )
+- [sources/org/apache/batik/ext/awt/geom/ExtendedGeneralPath.java]( http://svn.apache.org/repos/asf/xmlgraphics/batik/branches/svg11/sources/org/apache/batik/ext/awt/geom/ExtendedGeneralPath.java ) 
 
 ## Develop
 
