@@ -37,3 +37,9 @@ svg {
   fill: purple;
   opacity: 0.5;
 }
+
+.tangent {
+  stroke: none;
+  fill: orange;
+  opacity: 0.5;
+}

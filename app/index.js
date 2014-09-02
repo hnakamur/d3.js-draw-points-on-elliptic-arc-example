@@ -12,7 +12,7 @@ var svg = d3.select('#example').append('svg')
 var ellipticArcData = {
   x1: 200, y1: 150,
   rx: 25, ry: 100,
-  xAxisRotation: 30,
+  xAxisRotation: 0,
   largeArcFlag: 1,
   sweepFlag: 1,
   x2: 250, y2: 150
@@ -46,6 +46,8 @@ var ellipticArc = new EllipticArc(
   ellipticArcData.y2
 );
 
+console.log('angleStart', ellipticArc.angleStart, 'angleExtent', ellipticArc.angleExtent);
+
 circleLayer.selectAll('circle.center').data([ellipticArc])
   .enter().append('circle')
   .attr({
@@ -77,7 +79,7 @@ var n = 16;
 var points = [];
 for (var i = 0; i <= n; i++) {
   var t = i / n;
-  points.push(ellipticArc.getPointAt(t));
+  points.push(ellipticArc.getPointAtT(t));
 }
 circleLayer.selectAll('circle.calculated').data(points)
   .enter().append('circle')
@@ -93,5 +95,21 @@ circleLayer.selectAll('circle.calculated').data(points)
     },
     cx: function(d) { return d.x; },
     cy: function(d) { return d.y; },
-    r: 1
+    r: 2
+  });
+
+var angles = ellipticArc.getTangentToXYAxesAngles();
+angles.forEach(function(angle, i) {
+  console.log('i', i, 'angle', angle, 't', ellipticArc.getTAtAngle(angle));
+});
+var tangentPoints = angles.map(function(angle) {
+  return ellipticArc.getPointAtAngle(angle);
+});
+circleLayer.selectAll('circle.tangent').data(tangentPoints)
+  .enter().append('circle')
+  .attr({
+    'class': 'tangent',
+    cx: function(d) { return d.x; },
+    cy: function(d) { return d.y; },
+    r: 4
   });
