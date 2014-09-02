@@ -1,0 +1,21 @@
+svg {
+  border: 1px solid black;
+}
+
+.reference {
+  stroke: red;
+  fill: none;
+  opacity: 0.5;
+}
+
+.center {
+  stroke: none;
+  fill: blue;
+  opacity: 0.5;
+}
+
+.calculated {
+  stroke: green;
+  fill: none;
+  opacity: 0.5;
+}
