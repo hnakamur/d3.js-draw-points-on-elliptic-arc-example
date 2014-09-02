@@ -11,14 +11,9 @@ var svg = d3.select('#example').append('svg')
 var ellipticArc = {
   x1: 200, y1: 150,
   rx: 25, ry: 100,
-  x_axis_rotation: 80,
-  //x_axis_rotation: -30,
-  //x_axis_rotation: 35,
-  //x_axis_rotation: 65,
-  //x_axis_rotation: 330,
-  large_arc_flag: 0,
+  x_axis_rotation: 30,
+  large_arc_flag: 1,
   sweep_flag: 1,
-  //x2: 150, y2: 125 
   x2: 250, y2: 150
 };
 
@@ -112,46 +107,22 @@ circleLayer.selectAll('circle.center').data([center])
     r: function(d) { return d.r; }
   });
 
-function dotProduct(u, v) {
-  return u.x * v.x + u.y * v.y;
-}
-
-function magnitude(v) {
-  return Math.sqrt(v.x * v.x + v.y * v.y);
-}
-
-function angleBetweenTwoVectors(u, v) {
-  return Math.acos(dotProduct(u, v) / (magnitude(u) * magnitude(v)));
-}
-
-//var ux = (x1p - cxp) / rx;
-//var uy = (y1p - cyp) / ry;
-//var vx = (-x1p - cxp) / rx;
-//var vy = (-y1p - cyp) / ry;
-var ux = x1 - cx;
-var uy = y1 - cy;
-var vx = x2 - cx;
-var vy = y2 - cy;
+var ux = (x1p - cxp) / rx;
+var uy = (y1p - cyp) / ry;
+var vx = (-x1p - cxp) / rx;
+var vy = (-y1p - cyp) / ry;
 console.log('ux', ux, 'uy', uy);
 console.log('vx', vx, 'vy', vy);
 
 var angleStartSign = uy < 0 ? -1 : 1;
-//var angleStart = toDegrees(angleStartSign * angleBetweenTwoVectors(
-//  {x: 1, y: 0},
-//  {x: ux, y: uy}
-//));
 var angleStartP = ux; // (1 * ux + 0 * uy);
 var angleStartN = Math.sqrt(ux * ux + uy * uy);
-var angleStart = toDegrees(angleStartSign * Math.acos(angleStartP / angleStartN)) - phiDegree;
+var angleStart = toDegrees(angleStartSign * Math.acos(angleStartP / angleStartN)); //- phiDegree;
 
 var angleExtentSign = ux * vy - uy * vx < 0 ? -1 : 1;
 var angleExtentP = ux * vx + uy * vy;
 var angleExtentN = Math.sqrt((ux * ux + uy * uy) * (vx * vx + vy * vy));
 var angleExtent = toDegrees(angleExtentSign * Math.acos(angleExtentP / angleExtentN));
-//var angleExtent = toDegrees(angleExtentSign * angleBetweenTwoVectors(
-//  {x: ux, y: uy},
-//  {x: vx, y: vy}
-//));
 console.log('before modify angleStart', angleStart, 'angleExtent', angleExtent);
 
 if(!sweepFlag && angleExtent > 0) {
@@ -161,9 +132,6 @@ if(!sweepFlag && angleExtent > 0) {
 }
 angleExtent %= 360;
 angleStart %= 360;
-//if (angleStart < 0) {
-//  angleStart += 360;
-//}
 console.log('after modify angleStart', angleStart, 'angleExtent', angleExtent);
 
 circleLayer.append('ellipse')
@@ -178,20 +146,38 @@ circleLayer.append('ellipse')
                'translate(' + (-cx) + ',' + (-cy) + ')'
   });
 
-var lineTheta1 = toRadians(phiDegree + angleStart);
-console.log('lineTheta1', lineTheta1, toDegrees(lineTheta1));
-circleLayer.append('path')
-  .attr({
-    'class': 'calculated',
-    d: 'M' + cx + ' ' + cy +
-       //' ' + x1 + ' ' + y1
-       ' ' + (cx + 150 * Math.cos(lineTheta1)) + ' ' + (cy + 150 * Math.sin(lineTheta1))
-  });
+function getPoint(theta) {
+  var rxc = rx * Math.cos(theta);
+  var rys = ry * Math.sin(theta);
+  return {
+    x: cx + cosPhi * rxc - sinPhi * rys,
+    y: cy + sinPhi * rxc + cosPhi * rys
+  };
+}
 
-var lineTheta2 = toRadians(phiDegree + angleStart + angleExtent);
-circleLayer.append('path')
+var n = 16;
+var thetaStart = toRadians(angleStart);
+var thetaExtent = toRadians(angleExtent);
+var points = [];
+points.push(getPoint(thetaStart))
+for (var i = 1; i < n; i++) {
+  var theta = thetaStart + i * thetaExtent / n;
+  points.push(getPoint(theta));
+}
+points.push(getPoint(thetaStart + thetaExtent));
+circleLayer.selectAll('circle.calculated').data(points)
+  .enter().append('circle')
   .attr({
-    'class': 'calculated',
-    d: 'm' + cx + ' ' + cy +
-       ' ' + 100 * Math.cos(lineTheta2) + ' ' + 100 * Math.sin(lineTheta2)
+    'class': function(d, i) {
+      if (i === 0) {
+        return 'calculated start';
+      } else if (i === points.length - 1) {
+        return 'calculated end';
+      } else {
+        return 'calculated between';
+      }
+    },
+    cx: function(d) { return d.x; },
+    cy: function(d) { return d.y; },
+    r: 1
   });

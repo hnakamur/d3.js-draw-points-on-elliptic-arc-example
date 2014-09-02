@@ -19,3 +19,21 @@ svg {
   fill: none;
   opacity: 0.5;
 }
+
+.calculated.between {
+  stroke: none;
+  fill: green;
+  opacity: 0.5;
+}
+
+.calculated.start {
+  stroke: none;
+  fill: blue;
+  opacity: 0.5;
+}
+
+.calculated.end {
+  stroke: none;
+  fill: purple;
+  opacity: 0.5;
+}
