@@ -34,7 +34,7 @@ referenceLayer.selectAll('path.reference').data([ellipticArcData])
     }
   });
 
-var ellipticArc = new EllipticArc(
+var ellipticArc = EllipticArc.fromSvgPathParameters(
   ellipticArcData.x1,
   ellipticArcData.y1,
   ellipticArcData.rx,
