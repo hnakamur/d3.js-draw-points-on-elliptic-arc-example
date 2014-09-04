@@ -34,7 +34,7 @@ referenceLayer.selectAll('path.reference').data([ellipticArcData])
     }
   });
 
-var ellipticArc = new EllipticArc(
+var ellipticArc = EllipticArc.fromSvgPathParameters(
   ellipticArcData.x1,
   ellipticArcData.y1,
   ellipticArcData.rx,
@@ -98,7 +98,7 @@ circleLayer.selectAll('circle.calculated').data(points)
     r: 2
   });
 
-var angles = ellipticArc.getTangentToXYAxesAngles();
+var angles = ellipticArc.getXYTangentAngles();
 angles.forEach(function(angle, i) {
   console.log('i', i, 'angle', angle, 't', ellipticArc.getTAtAngle(angle));
 });
